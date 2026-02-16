@@ -254,7 +254,7 @@
 </head>
 <body>
 @php
-    $kamiUrl = 'https://vec.456781.xyz/vector/kami';
+    $kamiUrl = route('vector-web.kami');
     $statusLabels = [
         'queued' => '排队中',
         'running' => '处理中',

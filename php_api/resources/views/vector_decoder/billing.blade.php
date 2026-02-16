@@ -372,7 +372,7 @@
 <body>
 <main class="shell">
     @php
-        $kamiUrl = 'https://vec.456781.xyz/vector/kami';
+        $kamiUrl = route('vector-web.kami');
     @endphp
     <section class="head">
         <span class="eyebrow">Billing Console</span>

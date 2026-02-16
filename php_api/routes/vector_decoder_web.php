@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Route;
 
 Route::prefix('vector')->group(function () {
     Route::get('/', [UploadController::class, 'index'])->name('vector-web.upload');
+    Route::view('/kami', 'vector_decoder.kami')->name('vector-web.kami');
     Route::post('/upload', [UploadController::class, 'submit'])
         ->middleware([EnsurePaidAccessForUpload::class])
         ->name('vector-web.upload.submit');
