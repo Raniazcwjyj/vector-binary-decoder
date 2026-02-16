@@ -1,0 +1,9 @@
+{
+  "name": "vector-decoder/php-api",
+  "type": "project",
+  "require": {
+    "php": "^8.2",
+    "laravel/framework": "^11.0",
+    "guzzlehttp/guzzle": "^7.0"
+  }
+}

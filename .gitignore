@@ -1,0 +1,27 @@
+# Python-generated files
+__pycache__/
+*.py[oc]
+build/
+dist/
+wheels/
+*.egg-info
+
+# Virtual environments
+.venv
+
+# IDE
+.idea/
+.vscode/
+*.swp
+
+# Output files
+*.svg
+python_engine/engine_output/
+php_api/storage/
+php_api/vendor/
+capture_output/
+tmp_bundle_*/
+dist*/
+
+# Claude Code
+.claude/
