@@ -1,27 +1,28 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>Vector 上传中心</title>
+    <title>上传中心</title>
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap");
 
         :root {
-            --bg: #09131a;
-            --panel: rgba(12, 29, 40, .78);
-            --panel-2: rgba(10, 23, 32, .9);
-            --line: rgba(146, 203, 232, .24);
-            --ink: #ecfbff;
-            --muted: #9ebdc8;
-            --hot: #ff8a1f;
-            --hot-2: #ff5b1f;
-            --cool: #32d0ff;
-            --green: #3ee58f;
-            --warn-bg: rgba(255, 130, 58, .12);
-            --warn-line: rgba(255, 170, 95, .45);
-            --ok-bg: rgba(62, 229, 143, .14);
-            --ok-line: rgba(80, 236, 158, .44);
+            --bg: #eef5fa;
+            --ink: #102534;
+            --muted: #5a7483;
+            --line: #d0dfeb;
+            --card: rgba(255, 255, 255, .86);
+            --card-strong: rgba(255, 255, 255, .94);
+            --accent: #0d9bd8;
+            --accent-2: #0ec49d;
+            --hot: #ff6e3b;
+            --hot-2: #f55a2e;
+            --ok: #0a9d66;
+            --ok-bg: #ebfbf3;
+            --err: #cf5f3b;
+            --err-bg: #fff3ee;
+            --shadow: 0 22px 46px rgba(19, 72, 95, .16);
         }
 
         * { box-sizing: border-box; }
@@ -30,74 +31,176 @@
             margin: 0;
             min-height: 100vh;
             color: var(--ink);
-            font-family: "Noto Sans SC", sans-serif;
+            font-family: "Noto Sans SC", "Sora", sans-serif;
             background:
-                radial-gradient(1000px 580px at -8% -12%, rgba(35, 162, 230, .24), transparent 60%),
-                radial-gradient(980px 540px at 110% 115%, rgba(255, 130, 31, .2), transparent 62%),
-                linear-gradient(145deg, #050a0f 0%, #08131d 35%, #060b12 100%);
+                radial-gradient(1000px 520px at -18% -12%, #cde9fb 0%, transparent 62%),
+                radial-gradient(960px 520px at 114% 114%, #ffe6d6 0%, transparent 62%),
+                repeating-linear-gradient(125deg, rgba(13, 155, 216, .03) 0 2px, transparent 2px 12px),
+                linear-gradient(155deg, #f9fcff 0%, #edf5fa 48%, #f6fbff 100%);
         }
 
         .shell {
-            max-width: 1220px;
+            width: min(1180px, calc(100% - 24px));
             margin: 0 auto;
-            padding: 24px 16px 42px;
+            padding: 26px 0 34px;
         }
 
-        .top {
+        .hero {
             border: 1px solid var(--line);
             border-radius: 24px;
-            padding: 16px 16px 14px;
             background:
-                linear-gradient(130deg, rgba(26, 51, 71, .55), rgba(10, 24, 35, .82)),
-                repeating-linear-gradient(
-                    -35deg,
-                    rgba(89, 191, 238, .07) 0 2px,
-                    transparent 2px 10px
-                );
-            box-shadow: 0 24px 50px rgba(0, 0, 0, .38);
+                linear-gradient(145deg, rgba(255,255,255,.9), rgba(248,252,255,.86));
+            box-shadow: var(--shadow);
+            padding: 22px;
+            position: relative;
+            overflow: hidden;
         }
 
-        .headline {
-            margin: 0 0 12px;
-            font-family: "Orbitron", "Noto Sans SC", sans-serif;
-            font-size: clamp(28px, 4.8vw, 52px);
-            line-height: 1.06;
-            letter-spacing: .02em;
+        .hero::before,
+        .hero::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            filter: blur(3px);
+            pointer-events: none;
+        }
+
+        .hero::before {
+            width: 260px;
+            height: 260px;
+            right: -60px;
+            top: -90px;
+            background: radial-gradient(circle at center, rgba(13, 155, 216, .22) 0%, rgba(13, 155, 216, 0) 72%);
+        }
+
+        .hero::after {
+            width: 220px;
+            height: 220px;
+            left: -40px;
+            bottom: -90px;
+            background: radial-gradient(circle at center, rgba(255, 110, 59, .2) 0%, rgba(255, 110, 59, 0) 76%);
+        }
+
+        .eyebrow {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            border: 1px solid #b7d7eb;
+            border-radius: 999px;
+            padding: 6px 12px;
+            background: #edf7fd;
+            color: #137ba8;
+            font-size: 12px;
+            letter-spacing: .08em;
             text-transform: uppercase;
+            font-weight: 700;
         }
 
-        .headline strong {
-            color: var(--hot);
-            text-shadow: 0 0 18px rgba(255, 138, 31, .45);
+        .eyebrow::before {
+            content: "";
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background: currentColor;
+            box-shadow: 0 0 0 5px rgba(19, 123, 168, .14);
+            animation: pulse 2s ease infinite;
+        }
+
+        h1 {
+            margin: 12px 0 8px;
+            font-family: "Sora", "Noto Sans SC", sans-serif;
+            font-weight: 800;
+            font-size: clamp(32px, 5vw, 56px);
+            line-height: 1.04;
+            letter-spacing: -.02em;
+        }
+
+        h1 strong {
+            color: var(--hot-2);
+            text-shadow: 0 10px 20px rgba(245, 90, 46, .22);
         }
 
         .lead {
             margin: 0;
-            color: var(--muted);
-            line-height: 1.7;
-            max-width: 920px;
+            max-width: 760px;
             font-size: 15px;
+            line-height: 1.78;
+            color: var(--muted);
         }
 
-        .grid {
+        .hero-tags {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .hero-tag {
+            border: 1px solid #c9ddea;
+            border-radius: 999px;
+            background: #f4faff;
+            color: #315f73;
+            font-size: 12px;
+            padding: 6px 11px;
+        }
+
+        .layout {
             margin-top: 14px;
             display: grid;
-            grid-template-columns: 1.45fr .95fr;
+            grid-template-columns: 1.32fr .96fr;
             gap: 14px;
         }
 
-        .card {
+        .panel {
             border: 1px solid var(--line);
             border-radius: 18px;
-            background: var(--panel);
+            background: var(--card);
             backdrop-filter: blur(8px);
+            box-shadow: 0 14px 32px rgba(20, 68, 89, .11);
             padding: 14px;
         }
 
-        .card h2, .card h3 {
+        .panel h2 {
             margin: 0 0 10px;
-            font-family: "Orbitron", "Noto Sans SC", sans-serif;
-            letter-spacing: .02em;
+            font-family: "Sora", "Noto Sans SC", sans-serif;
+            font-size: 24px;
+            letter-spacing: .01em;
+        }
+
+        .msg {
+            border-radius: 12px;
+            margin-bottom: 10px;
+            padding: 10px 12px;
+            line-height: 1.56;
+            font-size: 14px;
+        }
+
+        .msg.error {
+            border: 1px solid #efc8ba;
+            background: var(--err-bg);
+            color: var(--err);
+        }
+
+        .msg.ok {
+            border: 1px solid #bfe6d3;
+            background: var(--ok-bg);
+            color: var(--ok);
+        }
+
+        .chips {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 12px;
+        }
+
+        .chip {
+            border: 1px solid #cfe2ec;
+            border-radius: 999px;
+            background: #f3f9fd;
+            color: #3c677a;
+            padding: 6px 10px;
+            font-size: 12px;
         }
 
         .form-grid {
@@ -109,168 +212,142 @@
         .full { grid-column: 1 / -1; }
 
         .field {
-            border: 1px solid rgba(145, 204, 233, .24);
+            border: 1px solid #d4e3eb;
             border-radius: 12px;
-            background: rgba(10, 22, 31, .72);
+            background: var(--card-strong);
             padding: 10px;
         }
 
         .field label {
             display: block;
             margin-bottom: 7px;
-            color: #97d8f2;
             font-size: 12px;
+            color: #355f73;
             font-weight: 700;
-            letter-spacing: .08em;
+            letter-spacing: .06em;
             text-transform: uppercase;
         }
 
         input[type="file"],
-        input[type="number"],
-        input[type="text"] {
+        input[type="number"] {
             width: 100%;
-            border: 1px solid rgba(129, 189, 219, .35);
+            border: 1px solid #c7dbe7;
             border-radius: 10px;
-            background: rgba(2, 10, 16, .72);
-            color: #ebf8ff;
-            padding: 11px 12px;
+            background: #fff;
+            color: #1a3340;
+            padding: 11px;
             font: inherit;
+            transition: border-color .2s ease, box-shadow .2s ease;
         }
 
         input:focus {
             outline: none;
-            border-color: var(--cool);
-            box-shadow: 0 0 0 3px rgba(50, 208, 255, .2);
+            border-color: #28a5d4;
+            box-shadow: 0 0 0 3px rgba(40, 165, 212, .16);
         }
 
         .hint {
             margin-top: 7px;
-            color: #88a8b4;
             font-size: 12px;
-            line-height: 1.45;
+            color: #6e8792;
+        }
+
+        .actions {
+            margin-top: 12px;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            gap: 10px;
         }
 
         .btn {
             border: 0;
-            border-radius: 11px;
-            padding: 12px 16px;
+            border-radius: 12px;
+            padding: 12px 18px;
             font: inherit;
             font-weight: 800;
             letter-spacing: .06em;
-            text-transform: uppercase;
             color: #fff;
+            background: linear-gradient(120deg, var(--hot) 0%, var(--hot-2) 42%, #e24747 100%);
+            box-shadow: 0 12px 24px rgba(207, 96, 54, .24);
             cursor: pointer;
-            background: linear-gradient(118deg, var(--hot) 0%, var(--hot-2) 44%, #f12c7e 100%);
-            box-shadow: 0 12px 20px rgba(216, 74, 31, .28);
-            transition: transform .14s ease, filter .14s ease;
+            transition: transform .16s ease, filter .16s ease;
         }
 
         .btn:hover {
             transform: translateY(-1px);
-            filter: saturate(1.12);
-        }
-
-        .cta-line {
-            margin-top: 10px;
-            display: flex;
-            gap: 10px;
-            align-items: center;
-            flex-wrap: wrap;
+            filter: saturate(1.08);
         }
 
         .quiet {
-            color: #97afba;
             font-size: 13px;
+            color: #65818d;
+        }
+
+        .meta-list {
+            display: grid;
+            gap: 8px;
+        }
+
+        .meta-item {
+            border: 1px solid #d1e2eb;
+            border-radius: 11px;
+            background: rgba(255,255,255,.88);
+            padding: 9px 10px;
+        }
+
+        .meta-label {
+            font-size: 12px;
+            color: #698591;
+        }
+
+        .meta-value {
+            margin-top: 4px;
+            font-weight: 700;
+            color: #173341;
+            word-break: break-all;
         }
 
         .pill {
             display: inline-flex;
             align-items: center;
-            gap: 7px;
+            border: 1px solid #c7e6d7;
             border-radius: 999px;
-            border: 1px solid rgba(134, 208, 241, .35);
-            background: rgba(8, 22, 31, .76);
-            padding: 6px 10px;
+            background: #ecfaf3;
+            color: #277e59;
             font-size: 12px;
-            color: #9fd4ea;
-            margin-right: 6px;
-            margin-bottom: 6px;
-        }
-
-        .pill.ok {
-            border-color: var(--ok-line);
-            background: var(--ok-bg);
-            color: #8ff1bf;
+            padding: 6px 11px;
         }
 
         .pill.warn {
-            border-color: var(--warn-line);
-            background: var(--warn-bg);
-            color: #ffc38f;
+            border-color: #f0cfbf;
+            background: #fff4ee;
+            color: #af5d3b;
         }
 
-        .msg {
-            border-radius: 12px;
-            padding: 10px 12px;
-            margin-bottom: 10px;
-            line-height: 1.55;
-            font-size: 14px;
-        }
-
-        .msg.error {
-            border: 1px solid var(--warn-line);
-            background: var(--warn-bg);
-            color: #ffbf8e;
-        }
-
-        .msg.ok {
-            border: 1px solid var(--ok-line);
-            background: var(--ok-bg);
-            color: #9ef4c5;
-        }
-
-        .meta-list {
-            display: grid;
-            grid-template-columns: 1fr;
-            gap: 8px;
-            margin-top: 8px;
-        }
-
-        .meta-item {
-            border-radius: 10px;
-            border: 1px solid rgba(144, 204, 234, .24);
-            background: rgba(8, 18, 26, .68);
-            padding: 9px 10px;
-        }
-
-        .meta-label {
-            color: #8aa6b3;
-            font-size: 12px;
-            margin-bottom: 4px;
-        }
-
-        .meta-value {
-            color: #f1fbff;
-            font-weight: 700;
-            word-break: break-all;
-        }
-
-        a.link {
-            color: #7cd4ff;
+        .link {
+            display: inline-block;
+            margin-top: 10px;
+            color: #0f7ea7;
             text-decoration: none;
             font-weight: 700;
         }
 
-        a.link:hover { text-decoration: underline; }
+        .link:hover { text-decoration: underline; }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.12); opacity: .72; }
+        }
 
         @media (max-width: 980px) {
-            .grid { grid-template-columns: 1fr; }
+            .layout { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 720px) {
-            .shell { padding: 14px 10px 24px; }
-            .top { border-radius: 16px; padding: 10px; }
-            .card { border-radius: 14px; padding: 10px; }
+            .shell { width: min(1180px, calc(100% - 18px)); padding: 14px 0 20px; }
+            .hero { border-radius: 16px; padding: 12px; }
+            .panel { border-radius: 14px; padding: 10px; }
             .form-grid { grid-template-columns: 1fr; }
             .btn { width: 100%; }
         }
@@ -278,14 +355,18 @@
 </head>
 <body>
 <main class="shell">
-    <section class="top">
-        <h1 class="headline">Vector <strong>Capture</strong> Upload</h1>
-        <p class="lead">
-            上传图片后系统会自动抓取向量数据并生成 SVG。现在已接入卡密计费：支持会员时长与积分，失败任务自动退款，适合直接商业化运营。
-        </p>
+    <section class="hero">
+        <span class="eyebrow">Vector Workspace</span>
+        <h1>图片上传 <strong>任务中心</strong></h1>
+        <p class="lead">请上传图片并提交任务，处理完成后可在任务页面查看与下载结果。</p>
+        <div class="hero-tags">
+            <span class="hero-tag">极速处理</span>
+            <span class="hero-tag">状态可追踪</span>
+            <span class="hero-tag">结果可下载</span>
+        </div>
 
-        <div class="grid">
-            <section class="card">
+        <div class="layout">
+            <section class="panel">
                 <h2>开始上传</h2>
 
                 @if ($errors->any())
@@ -298,26 +379,28 @@
                     <div class="msg ok">{{ session('billing_success') }}</div>
                 @endif
 
-                <div class="pill">上传上限：{{ (int) $uploadMaxKb }} KB</div>
-                <div class="pill">默认等待：{{ (int) $defaultMaxWaitSeconds }} 秒</div>
-                <div class="pill">空闲判定：{{ (int) $defaultIdleSeconds }} 秒</div>
+                <div class="chips">
+                    <span class="chip">上传上限 {{ (int) $uploadMaxKb }} KB</span>
+                    <span class="chip">默认等待 {{ (int) $defaultMaxWaitSeconds }} 秒</span>
+                    <span class="chip">空闲判定 {{ (int) $defaultIdleSeconds }} 秒</span>
+                </div>
 
-                <form method="post" action="{{ route('vector-web.upload.submit') }}" enctype="multipart/form-data" style="margin-top:10px;">
+                <form method="post" action="{{ route('vector-web.upload.submit') }}" enctype="multipart/form-data">
                     @csrf
                     <div class="form-grid">
                         <div class="field full">
                             <label for="image">上传图片</label>
                             <input type="file" id="image" name="image" accept="image/*" required>
-                            <div class="hint">支持 PNG/JPG/WebP 等常见格式。</div>
+                            <div class="hint">支持 PNG、JPG、WEBP 等常见图片格式。</div>
                         </div>
 
                         <div class="field">
-                            <label for="width">SVG 宽度</label>
+                            <label for="width">输出宽度</label>
                             <input type="number" id="width" name="width" value="400" min="1" max="4096">
                         </div>
 
                         <div class="field">
-                            <label for="height">SVG 高度</label>
+                            <label for="height">输出高度</label>
                             <input type="number" id="height" name="height" value="400" min="1" max="4096">
                         </div>
 
@@ -332,18 +415,18 @@
                         </div>
                     </div>
 
-                    <div class="cta-line">
+                    <div class="actions">
                         <button type="submit" class="btn">提交任务</button>
-                        <span class="quiet">任务创建后会自动跳转到状态页。</span>
+                        <span class="quiet">提交后会自动跳转到任务进度页面。</span>
                     </div>
                 </form>
             </section>
 
-            <aside class="card" style="background: var(--panel-2);">
-                <h3>计费账户</h3>
+            <aside class="panel">
+                <h2>账户信息</h2>
 
                 @if (!$billingEnabled)
-                    <div class="msg ok">当前站点已关闭计费，上传不扣积分。</div>
+                    <div class="msg ok">当前站点未启用计费，上传无需扣费。</div>
                 @else
                     <div class="meta-list">
                         <div class="meta-item">
@@ -352,9 +435,7 @@
                         </div>
                         <div class="meta-item">
                             <div class="meta-label">会员到期</div>
-                            <div class="meta-value">
-                                {{ $billingAccount->vip_expires_at ? $billingAccount->vip_expires_at->format('Y-m-d H:i:s') : '未开通' }}
-                            </div>
+                            <div class="meta-value">{{ $billingAccount->vip_expires_at ? $billingAccount->vip_expires_at->format('Y-m-d H:i:s') : '未开通' }}</div>
                         </div>
                         <div class="meta-item">
                             <div class="meta-label">积分余额</div>
@@ -362,21 +443,19 @@
                         </div>
                         <div class="meta-item">
                             <div class="meta-label">单次消耗</div>
-                            <div class="meta-value">{{ (int) $creditCostPerTask }} 积分/任务（会员期内免费）</div>
+                            <div class="meta-value">{{ (int) $creditCostPerTask }} 积分</div>
                         </div>
                     </div>
 
                     <div style="margin-top:10px;">
                         @if ($billingCanUpload)
-                            <span class="pill ok">可上传</span>
+                            <span class="pill">可上传</span>
                         @else
-                            <span class="pill warn">不可上传：请先兑换卡密</span>
+                            <span class="pill warn">不可上传，请先充值</span>
                         @endif
                     </div>
 
-                    <div style="margin-top:12px;">
-                        <a class="link" href="{{ route('vector-web.billing.index') }}">打开充值中心</a>
-                    </div>
+                    <a class="link" href="{{ route('vector-web.billing.index') }}">前往充值中心</a>
                 @endif
             </aside>
         </div>
@@ -384,4 +463,3 @@
 </main>
 </body>
 </html>
-

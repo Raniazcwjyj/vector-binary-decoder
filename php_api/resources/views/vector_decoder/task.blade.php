@@ -1,22 +1,22 @@
-<!doctype html>
+﻿<!doctype html>
 <html lang="zh-CN">
 <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1">
-    <title>任务追踪 - {{ $task->id }}</title>
+    <title>任务进度 - {{ $task->id }}</title>
     <style>
-        @import url("https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap");
+        @import url("https://fonts.googleapis.com/css2?family=Sora:wght@400;500;600;700;800&family=Noto+Sans+SC:wght@400;500;700;900&display=swap");
 
         :root {
-            --bg: #08131a;
-            --panel: rgba(12, 30, 41, .86);
-            --line: rgba(142, 199, 227, .25);
-            --ink: #ecfbff;
-            --muted: #9abdc9;
-            --run: #38d0ff;
-            --ok: #41e997;
-            --queue: #ffb155;
-            --err: #ff6a6a;
+            --ink: #102534;
+            --muted: #5d7987;
+            --line: #d1e1ec;
+            --card: rgba(255, 255, 255, .88);
+            --queue: #cf8a3e;
+            --run: #0c9ad2;
+            --ok: #109f67;
+            --err: #c64a4a;
+            --shadow: 0 22px 46px rgba(18, 68, 90, .14);
         }
 
         * { box-sizing: border-box; }
@@ -25,46 +25,73 @@
             margin: 0;
             min-height: 100vh;
             color: var(--ink);
-            font-family: "Noto Sans SC", sans-serif;
+            font-family: "Noto Sans SC", "Sora", sans-serif;
             background:
-                radial-gradient(980px 580px at -12% -8%, rgba(50, 208, 255, .2), transparent 60%),
-                radial-gradient(920px 560px at 112% 115%, rgba(255, 110, 64, .15), transparent 60%),
-                linear-gradient(140deg, #04090d 0%, #08141d 40%, #060a11 100%);
+                radial-gradient(980px 520px at -18% -10%, #d2ecff 0%, transparent 62%),
+                radial-gradient(900px 520px at 115% 110%, #ffe7d7 0%, transparent 62%),
+                linear-gradient(158deg, #f9fcff 0%, #edf5fa 46%, #f7fbff 100%);
         }
 
         .shell {
-            max-width: 980px;
+            width: min(980px, calc(100% - 22px));
             margin: 0 auto;
-            padding: 24px 14px 36px;
+            padding: 26px 0 30px;
         }
 
         .panel {
             border: 1px solid var(--line);
             border-radius: 22px;
-            background: var(--panel);
-            box-shadow: 0 24px 52px rgba(0, 0, 0, .35);
+            background: var(--card);
+            box-shadow: var(--shadow);
             padding: 16px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .panel::before,
+        .panel::after {
+            content: "";
+            position: absolute;
+            border-radius: 999px;
+            pointer-events: none;
+            filter: blur(2px);
+        }
+
+        .panel::before {
+            width: 220px;
+            height: 220px;
+            right: -60px;
+            top: -90px;
+            background: radial-gradient(circle at center, rgba(12, 154, 210, .2), rgba(12, 154, 210, 0) 72%);
+        }
+
+        .panel::after {
+            width: 220px;
+            height: 220px;
+            left: -65px;
+            bottom: -95px;
+            background: radial-gradient(circle at center, rgba(255, 110, 59, .18), rgba(255, 110, 59, 0) 74%);
         }
 
         h1 {
-            margin: 0 0 10px;
-            font-family: "Orbitron", "Noto Sans SC", sans-serif;
-            font-size: clamp(28px, 4.2vw, 46px);
-            letter-spacing: .03em;
-            text-transform: uppercase;
+            margin: 0 0 8px;
+            font-family: "Sora", "Noto Sans SC", sans-serif;
+            font-size: clamp(30px, 4.6vw, 46px);
+            line-height: 1.06;
+            letter-spacing: -.01em;
         }
 
         .task-id {
-            color: var(--muted);
             margin: 0 0 12px;
+            color: var(--muted);
             font-size: 14px;
         }
 
         code {
-            border: 1px solid rgba(136, 199, 231, .35);
-            background: rgba(8, 20, 28, .74);
-            color: #def4ff;
+            border: 1px solid #d1e1eb;
             border-radius: 8px;
+            background: #f2f9fd;
+            color: #1f3b48;
             padding: 2px 7px;
             font-family: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
             word-break: break-all;
@@ -73,7 +100,6 @@
         .row {
             display: flex;
             flex-wrap: wrap;
-            align-items: center;
             gap: 8px;
             margin-bottom: 10px;
         }
@@ -83,13 +109,14 @@
             align-items: center;
             gap: 8px;
             border-radius: 999px;
-            border: 1px solid rgba(138, 196, 226, .32);
-            background: rgba(7, 19, 27, .74);
-            padding: 8px 12px;
-            font-family: "Orbitron", "Noto Sans SC", sans-serif;
+            border: 1px solid #d0e2ea;
+            background: #f8fcff;
+            color: #446774;
             font-size: 12px;
-            letter-spacing: .06em;
+            font-weight: 700;
+            letter-spacing: .05em;
             text-transform: uppercase;
+            padding: 7px 11px;
         }
 
         .pill::before {
@@ -98,7 +125,7 @@
             height: 8px;
             border-radius: 50%;
             background: currentColor;
-            box-shadow: 0 0 0 4px color-mix(in srgb, currentColor 18%, transparent);
+            box-shadow: 0 0 0 5px rgba(68, 103, 116, .12);
         }
 
         .pill[data-state="queued"] { color: var(--queue); }
@@ -107,44 +134,43 @@
         .pill[data-state="failed"] { color: var(--err); }
 
         .meter {
-            border: 1px solid rgba(138, 196, 226, .25);
+            border: 1px solid #d4e4ec;
             border-radius: 999px;
-            background: rgba(8, 20, 28, .74);
+            background: #edf6fb;
             overflow: hidden;
             height: 14px;
-            margin-bottom: 12px;
+            margin-bottom: 10px;
         }
 
         .meter > i {
             display: block;
             width: 5%;
             height: 100%;
-            background: linear-gradient(104deg, #39d1ff 0%, #2fd3ad 45%, #7de765 100%);
+            background: linear-gradient(102deg, #2fb4de 0%, #18b5b0 52%, #48c878 100%);
             background-size: 220% 100%;
             animation: flow 1.2s linear infinite;
             transition: width .3s ease;
         }
 
-        .meter > i.done {
-            animation: none;
-        }
+        .meter > i.done { animation: none; }
 
         .meta {
             min-height: 22px;
-            color: #95b3bf;
+            color: #627f8c;
             font-size: 14px;
             margin-bottom: 10px;
         }
 
         .error {
             display: none;
+            border: 1px solid #eecbcb;
             border-radius: 12px;
-            border: 1px solid rgba(255, 129, 129, .45);
-            background: rgba(255, 97, 97, .12);
-            color: #ffb4b4;
+            background: #fff4f4;
+            color: #b54d4d;
+            line-height: 1.6;
+            font-size: 14px;
             padding: 10px 12px;
             margin-bottom: 10px;
-            line-height: 1.6;
             white-space: pre-wrap;
         }
 
@@ -157,17 +183,19 @@
 
         .btn {
             text-decoration: none;
+            border: 1px solid #cde0ea;
             border-radius: 11px;
-            border: 1px solid rgba(138, 198, 228, .35);
-            background: rgba(9, 22, 31, .85);
-            color: #a6ddf5;
-            padding: 10px 14px;
+            background: #f6fcff;
+            color: #24596f;
             font-weight: 700;
             letter-spacing: .03em;
+            padding: 10px 14px;
+            transition: border-color .16s ease, background-color .16s ease;
         }
 
         .btn:hover {
-            border-color: rgba(166, 221, 245, .65);
+            border-color: #95bfd2;
+            background: #ecf8fd;
         }
 
         .nav {
@@ -178,7 +206,7 @@
         }
 
         .nav a {
-            color: #8ad6ff;
+            color: #0d7ea6;
             text-decoration: none;
             font-weight: 700;
         }
@@ -189,24 +217,37 @@
             from { background-position: 0 50%; }
             to { background-position: 220% 50%; }
         }
+
+        @media (max-width: 720px) {
+            .shell { width: min(980px, calc(100% - 16px)); padding: 14px 0 20px; }
+            .panel { border-radius: 16px; padding: 12px; }
+        }
     </style>
 </head>
 <body>
+@php
+    $statusLabels = [
+        'queued' => '排队中',
+        'running' => '处理中',
+        'succeeded' => '已完成',
+        'failed' => '失败',
+    ];
+@endphp
 <main class="shell">
     <section class="panel">
-        <h1>Task Monitor</h1>
+        <h1>任务监控台</h1>
         <p class="task-id">任务 ID：<code>{{ $task->id }}</code></p>
 
         <div class="row">
-            <div class="pill" id="statusPill" data-state="{{ $task->status }}">{{ $task->status }}</div>
+            <div class="pill" id="statusPill" data-state="{{ $task->status }}">{{ $statusLabels[$task->status] ?? $task->status }}</div>
             @if ($task->billing_mode)
-                <div class="pill">billing: {{ $task->billing_mode }}</div>
+                <div class="pill">计费：{{ strtoupper((string) $task->billing_mode) }}</div>
             @endif
             @if ((int) $task->billing_credits_cost > 0)
-                <div class="pill">cost: {{ (int) $task->billing_credits_cost }}</div>
+                <div class="pill">消耗：{{ (int) $task->billing_credits_cost }}</div>
             @endif
             @if ($task->refunded_at)
-                <div class="pill">refunded</div>
+                <div class="pill">已退款</div>
             @endif
         </div>
 
@@ -218,8 +259,8 @@
         <div class="error" id="errorBox"></div>
 
         <div class="links" id="resultLinks">
-            <a class="btn" id="openSvg" href="#" target="_blank" rel="noopener">在线查看 SVG</a>
-            <a class="btn" id="downloadSvg" href="#" target="_blank" rel="noopener">下载 SVG</a>
+            <a class="btn" id="openSvg" href="#" target="_blank" rel="noopener">在线查看结果</a>
+            <a class="btn" id="downloadSvg" href="#" target="_blank" rel="noopener">下载文件</a>
         </div>
 
         <div class="nav">
@@ -239,18 +280,26 @@
     const errorBox = document.getElementById('errorBox');
     const metaText = document.getElementById('metaText');
     const statusUrl = @json(route('vector-web.tasks.status', ['task_id' => $task->id], false));
+    const statusLabels = {
+        queued: '排队中',
+        running: '处理中',
+        succeeded: '已完成',
+        failed: '失败',
+    };
 
     const setState = (state) => {
         statusPill.dataset.state = state;
-        statusPill.textContent = state;
+        statusPill.textContent = statusLabels[state] || state;
     };
 
     const poll = async () => {
         try {
             const res = await fetch(statusUrl, { credentials: 'same-origin' });
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            const data = await res.json();
+            if (!res.ok) {
+                throw new Error('HTTP ' + res.status);
+            }
 
+            const data = await res.json();
             errorBox.style.display = 'none';
             errorBox.textContent = '';
 
@@ -258,11 +307,13 @@
             progressBar.style.width = (data.progress || 0) + '%';
             progressBar.classList.toggle('done', data.status === 'succeeded' || data.status === 'failed');
 
-            if (data.meta) {
-                const chunks = data.meta.chunks_used ?? '-';
-                const loops = data.meta.loops ?? '-';
-                const shapes = data.meta.shapes ?? '-';
-                metaText.textContent = `统计：chunks=${chunks}，loops=${loops}，shapes=${shapes}`;
+            if (data.status === 'running') {
+                const elapsed = data.meta && data.meta.elapsed_ms ? Math.max(1, Math.round(data.meta.elapsed_ms / 1000)) : null;
+                metaText.textContent = elapsed ? `处理中，已用时约 ${elapsed} 秒` : '处理中，请稍候...';
+            } else if (data.status === 'queued') {
+                metaText.textContent = '任务已进入队列，正在等待处理。';
+            } else if (data.status === 'succeeded') {
+                metaText.textContent = '处理完成，可查看或下载结果。';
             } else {
                 metaText.textContent = '';
             }
@@ -286,12 +337,13 @@
 
             if ((data.status === 'queued' || data.status === 'running') && data.error_code) {
                 errorBox.style.display = 'block';
-                errorBox.textContent = '重试中: ' + data.error_code + ': ' + (data.error_message || '-');
+                errorBox.textContent = '系统重试中：' + data.error_code + (data.error_message ? ' - ' + data.error_message : '');
             }
         } catch (e) {
             errorBox.style.display = 'block';
-            errorBox.textContent = '状态查询失败: ' + (e && e.message ? e.message : e);
+            errorBox.textContent = '状态查询失败：' + (e && e.message ? e.message : e);
         }
+
         setTimeout(poll, 1800);
     };
 
@@ -300,4 +352,3 @@
 </script>
 </body>
 </html>
-
