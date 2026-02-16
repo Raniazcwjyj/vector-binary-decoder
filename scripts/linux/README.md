@@ -35,6 +35,7 @@ curl -fsSL https://raw.githubusercontent.com/Raniazcwjyj/vector-binary-decoder/m
 Notes:
 
 - Script auto-enforces stable `.env` defaults for this stack (`QUEUE_CONNECTION=redis`, `CACHE_STORE=file`, `SESSION_DRIVER=file`).
+- Script no longer force-overwrites web capture defaults; if missing, it sets `VECTOR_DECODER_WEB_UI_DEFAULT_HEADLESS=false` (safer on BT/Xvfb servers).
 - Script auto-writes billing defaults (`VECTOR_DECODER_BILLING_ENABLED`, `VECTOR_DECODER_BILLING_ENFORCE_WEB_UPLOAD`, `VECTOR_DECODER_BILLING_CREDIT_COST_PER_TASK`).
 - Script auto-installs Composer v2 if missing/incompatible.
 - Playwright browsers are installed into `python_engine/.pw-browsers` and verified before service start.
