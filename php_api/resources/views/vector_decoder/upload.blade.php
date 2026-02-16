@@ -144,6 +144,80 @@
             padding: 6px 11px;
         }
 
+        .quick-overview {
+            margin-top: 12px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .quick-card {
+            border: 1px solid #d2e2ec;
+            border-radius: 12px;
+            background: rgba(255, 255, 255, .9);
+            padding: 10px;
+        }
+
+        .quick-title {
+            color: #6a8794;
+            font-size: 12px;
+            margin-bottom: 4px;
+        }
+
+        .quick-main {
+            font-weight: 800;
+            font-size: 18px;
+            color: #1e3e4d;
+            line-height: 1.2;
+        }
+
+        .quick-main.ok { color: #17865c; }
+        .quick-main.warn { color: #b25a35; }
+
+        .quick-note {
+            margin-top: 4px;
+            color: #66828f;
+            font-size: 12px;
+        }
+
+        .action-links {
+            margin-top: 10px;
+            display: grid;
+            gap: 8px;
+        }
+
+        .action-link {
+            display: block;
+            text-decoration: none;
+            border: 1px solid #cfe0ea;
+            border-radius: 10px;
+            background: #f5fbff;
+            color: #24586f;
+            font-weight: 700;
+            text-align: center;
+            padding: 10px 12px;
+            transition: transform .16s ease, border-color .16s ease;
+        }
+
+        .action-link:hover {
+            transform: translateY(-1px);
+            border-color: #a9cadb;
+        }
+
+        .action-link.primary {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(120deg, #0d9bd8 0%, #13a8ea 45%, #0ec49d 100%);
+            box-shadow: 0 10px 20px rgba(30, 132, 188, .22);
+        }
+
+        .action-link.kami {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(120deg, #ff7d44 0%, #f45a2e 45%, #df3c3c 100%);
+            box-shadow: 0 10px 20px rgba(217, 95, 57, .22);
+        }
+
         .layout {
             margin-top: 14px;
             display: grid;
@@ -279,6 +353,14 @@
             filter: saturate(1.08);
         }
 
+        .btn:disabled {
+            cursor: not-allowed;
+            filter: grayscale(.24) saturate(.7);
+            opacity: .65;
+            transform: none;
+            box-shadow: none;
+        }
+
         .quiet {
             font-size: 13px;
             color: #65818d;
@@ -342,6 +424,7 @@
 
         @media (max-width: 980px) {
             .layout { grid-template-columns: 1fr; }
+            .quick-overview { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 720px) {
@@ -355,6 +438,10 @@
 </head>
 <body>
 <main class="shell">
+    @php
+        $kamiUrl = 'https://vec.456781.xyz/vector/kami';
+        $canUploadNow = !$billingEnabled || $billingCanUpload;
+    @endphp
     <section class="hero">
         <span class="eyebrow">Vector Workspace</span>
         <h1>图片上传 <strong>任务中心</strong></h1>
@@ -364,6 +451,34 @@
             <span class="hero-tag">状态可追踪</span>
             <span class="hero-tag">结果可下载</span>
         </div>
+
+        @if ($billingEnabled)
+            <div class="quick-overview">
+                <div class="quick-card">
+                    <div class="quick-title">上传权限</div>
+                    <div class="quick-main {{ $billingCanUpload ? 'ok' : 'warn' }}">{{ $billingCanUpload ? '可上传' : '不可上传' }}</div>
+                    <div class="quick-note">{{ $billingCanUpload ? '你可以直接提交任务。' : '请先充值或购买卡密后再上传。' }}</div>
+                </div>
+                <div class="quick-card">
+                    <div class="quick-title">当前积分</div>
+                    <div class="quick-main">{{ (int) $billingAccount->balance_credits }}</div>
+                    <div class="quick-note">单次任务消耗 {{ (int) $creditCostPerTask }} 积分。</div>
+                </div>
+                <div class="quick-card">
+                    <div class="quick-title">会员状态</div>
+                    <div class="quick-main">{{ $billingAccount->vip_expires_at ? '会员有效' : '普通账户' }}</div>
+                    <div class="quick-note">{{ $billingAccount->vip_expires_at ? ('到期：' . $billingAccount->vip_expires_at->format('Y-m-d H:i')) : '可通过卡密开通会员。' }}</div>
+                </div>
+            </div>
+        @else
+            <div class="quick-overview">
+                <div class="quick-card">
+                    <div class="quick-title">上传权限</div>
+                    <div class="quick-main ok">可上传</div>
+                    <div class="quick-note">当前站点未启用计费，提交任务无需扣费。</div>
+                </div>
+            </div>
+        @endif
 
         <div class="layout">
             <section class="panel">
@@ -416,8 +531,12 @@
                     </div>
 
                     <div class="actions">
-                        <button type="submit" class="btn">提交任务</button>
-                        <span class="quiet">提交后会自动跳转到任务进度页面。</span>
+                        <button type="submit" class="btn" @disabled(!$canUploadNow)>
+                            {{ $canUploadNow ? '提交任务' : '当前不可上传，请先充值' }}
+                        </button>
+                        <span class="quiet">
+                            {{ $canUploadNow ? '提交后会自动跳转到任务进度页面。' : '你可以先前往充值中心，或直接购买卡密。' }}
+                        </span>
                     </div>
                 </form>
             </section>
@@ -455,7 +574,10 @@
                         @endif
                     </div>
 
-                    <a class="link" href="{{ route('vector-web.billing.index') }}">前往充值中心</a>
+                    <div class="action-links">
+                        <a class="action-link primary" href="{{ route('vector-web.billing.index') }}">去充值中心</a>
+                        <a class="action-link kami" href="{{ $kamiUrl }}" target="_blank" rel="noopener">购买卡密</a>
+                    </div>
                 @endif
             </aside>
         </div>

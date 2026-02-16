@@ -211,7 +211,35 @@
             font-weight: 700;
         }
 
+        .nav a.kami {
+            border: 1px solid transparent;
+            border-radius: 10px;
+            padding: 6px 10px;
+            color: #fff;
+            background: linear-gradient(120deg, #ff7d44 0%, #f45a2e 45%, #df3c3c 100%);
+            box-shadow: 0 10px 20px rgba(217, 95, 57, .2);
+        }
+
         .nav a:hover { text-decoration: underline; }
+
+        .helper {
+            margin-top: 12px;
+            border: 1px solid #d3e3ed;
+            border-radius: 12px;
+            background: #f5fbff;
+            color: #355e72;
+            line-height: 1.6;
+            font-size: 13px;
+            padding: 10px 12px;
+        }
+
+        .helper a {
+            color: #0d7ea6;
+            font-weight: 700;
+            text-decoration: none;
+        }
+
+        .helper a:hover { text-decoration: underline; }
 
         @keyframes flow {
             from { background-position: 0 50%; }
@@ -226,6 +254,7 @@
 </head>
 <body>
 @php
+    $kamiUrl = 'https://vec.456781.xyz/vector/kami';
     $statusLabels = [
         'queued' => '排队中',
         'running' => '处理中',
@@ -266,6 +295,12 @@
         <div class="nav">
             <a href="{{ route('vector-web.upload') }}">返回上传页</a>
             <a href="{{ route('vector-web.billing.index') }}">充值中心</a>
+            <a class="kami" href="{{ $kamiUrl }}" target="_blank" rel="noopener">购买卡密</a>
+        </div>
+
+        <div class="helper">
+            处理失败或暂时不可上传时，可先前往 <a href="{{ route('vector-web.billing.index') }}">充值中心</a> 查看账户状态，
+            或直接 <a href="{{ $kamiUrl }}" target="_blank" rel="noopener">购买卡密</a> 后再重试。
         </div>
     </section>
 </main>

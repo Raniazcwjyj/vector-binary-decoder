@@ -125,6 +125,64 @@
             gap: 8px;
         }
 
+        .guide {
+            margin-top: 10px;
+            display: grid;
+            grid-template-columns: repeat(3, minmax(0, 1fr));
+            gap: 8px;
+        }
+
+        .guide-step {
+            border: 1px solid #d2e2ec;
+            border-radius: 11px;
+            background: rgba(255, 255, 255, .9);
+            padding: 10px;
+        }
+
+        .guide-step strong {
+            display: block;
+            color: #204457;
+            font-size: 14px;
+            margin-bottom: 4px;
+        }
+
+        .guide-step span {
+            color: #678291;
+            font-size: 12px;
+            line-height: 1.5;
+        }
+
+        .top-actions {
+            margin-top: 10px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+        }
+
+        .top-btn {
+            text-decoration: none;
+            border-radius: 10px;
+            border: 1px solid #cfe0ea;
+            background: #f6fbff;
+            color: #24586e;
+            font-weight: 700;
+            padding: 9px 13px;
+        }
+
+        .top-btn.primary {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(120deg, #0d99d7 0%, #1498f0 48%, #0db5a2 100%);
+            box-shadow: 0 10px 20px rgba(36, 130, 198, .22);
+        }
+
+        .top-btn.kami {
+            color: #fff;
+            border-color: transparent;
+            background: linear-gradient(120deg, #ff7d44 0%, #f45a2e 45%, #df3c3c 100%);
+            box-shadow: 0 10px 20px rgba(217, 95, 57, .22);
+        }
+
         .msg {
             border-radius: 12px;
             padding: 10px 12px;
@@ -299,6 +357,7 @@
 
         @media (max-width: 980px) {
             .layout { grid-template-columns: 1fr; }
+            .guide { grid-template-columns: 1fr; }
         }
 
         @media (max-width: 700px) {
@@ -312,10 +371,33 @@
 </head>
 <body>
 <main class="shell">
+    @php
+        $kamiUrl = 'https://vec.456781.xyz/vector/kami';
+    @endphp
     <section class="head">
         <span class="eyebrow">Billing Console</span>
         <h1>充值中心</h1>
         <p class="lead">在这里管理账户、兑换卡密与查看记录。页面仅展示与你当前账户相关的信息。</p>
+
+        <div class="guide">
+            <div class="guide-step">
+                <strong>第一步：购买卡密</strong>
+                <span>没有卡密时，先点击“购买卡密”获取可兑换的卡密。</span>
+            </div>
+            <div class="guide-step">
+                <strong>第二步：兑换到账户</strong>
+                <span>在本页输入卡密并兑换，积分或会员会立即到账。</span>
+            </div>
+            <div class="guide-step">
+                <strong>第三步：返回上传</strong>
+                <span>到账后返回上传页，直接提交任务即可。</span>
+            </div>
+        </div>
+
+        <div class="top-actions">
+            <a class="top-btn primary" href="{{ route('vector-web.upload') }}">返回上传页</a>
+            <a class="top-btn kami" href="{{ $kamiUrl }}" target="_blank" rel="noopener">购买卡密</a>
+        </div>
 
         <div class="alerts">
             @if (!$billingEnabled)
@@ -362,6 +444,7 @@
                 <div class="actions">
                     <button type="submit" class="btn">立即兑换</button>
                     <span class="hint">兑换成功后会立即更新账户状态。</span>
+                    <a class="top-btn kami" href="{{ $kamiUrl }}" target="_blank" rel="noopener">去购买卡密</a>
                 </div>
             </form>
 
@@ -435,6 +518,7 @@
 
     <div class="nav">
         <a href="{{ route('vector-web.upload') }}">返回上传页</a>
+        <a href="{{ $kamiUrl }}" target="_blank" rel="noopener">购买卡密</a>
     </div>
 </main>
 </body>
